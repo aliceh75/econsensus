@@ -1,6 +1,10 @@
+import lxml.html
 from django.core.urlresolvers import reverse
+from notification import models as notification
 from publicweb.tests.decision_test_case import DecisionTestCase
 from publicweb.models import Feedback, Decision
+from signals.management import DECISION_CHANGE
+
 
 # TODO: Check that POSTs save correct data and redirects work
 class ViewDecisionTest(DecisionTestCase):
@@ -46,3 +50,53 @@ class ViewDecisionTest(DecisionTestCase):
 
         form_data = self.get_form_values_from_response(response, 1)
         self.assertTrue(form_fields.issubset(set(form_data.keys())))
+
+    def test_decision_detail_contains_watch_toggle_link(self):
+        decision = self.create_and_return_decision()
+        doc = self._get_document('publicweb_decision_detail', decision.id)
+        elements = doc.cssselect('div#decision_detail a.watch.toggle')
+        self.assertEquals(len(elements), 1)
+
+    def test_view_page_watch_toggle_is_unwatched_when_no_user_is_watching(self):
+        decision = self.create_and_return_decision()
+        doc = self._get_document('publicweb_decision_detail', decision.id)
+        elements = doc.cssselect('div#decision_detail a.watch.toggle.unwatched')
+        self.assertEquals(len(elements), 1)
+
+    def test_view_page_watch_toggle_is_watched_when_the_current_user_is_watching(self):
+        decision = self.create_and_return_decision()
+        notification.observe(decision, self.user, DECISION_CHANGE)
+        doc = self._get_document('publicweb_decision_detail', decision.id)
+        elements = doc.cssselect('div#decision_detail a.watch.toggle.watched')
+        self.assertEquals(len(elements), 1)
+
+    def test_view_page_watch_toggle_is_unwatched_when_users_other_than_current_are_watching(self):
+        decision = self.create_and_return_decision()
+        notification.observe(decision, self.charlie, DECISION_CHANGE)
+        doc = self._get_document('publicweb_decision_detail', decision.id)
+        elements = doc.cssselect('div#decision_detail a.watch.toggle.unwatched')
+        self.assertEquals(len(elements), 1)
+
+    def test_following_unwatched_watch_toggle_adds_watcher(self):
+        decision = self.create_and_return_decision()
+        doc = self._get_document('publicweb_decision_detail', decision.id)
+        elements = doc.cssselect('div#decision_detail a.watch.toggle')
+        url = elements[0].get('href')
+        self.assertEquals(len(decision.watchers.all()), 0)
+        self.client.get(url)
+        self.assertEquals(len(decision.watchers.all()), 1)
+
+    def test_following_watched_watch_toggle_removes_watcher(self):
+        decision = self.create_and_return_decision()
+        notification.observe(decision, self.user, DECISION_CHANGE)
+        doc = self._get_document('publicweb_decision_detail', decision.id)
+        elements = doc.cssselect('div#decision_detail a.watch.toggle')
+        url = elements[0].get('href')
+        self.assertEquals(len(decision.watchers.all()), 1)
+        self.client.get(url)
+        self.assertEquals(len(decision.watchers.all()), 0)
+
+    def _get_document(self, view, *args):
+        """Fetch the given view, and return the result parsed with lxml"""
+        response = self.client.get(reverse(view, args=args))
+        return lxml.html.fromstring(str(response))

@@ -111,6 +111,16 @@ a.button {
 	top:0.2em;
 }
 
+a.toggle {
+       line-height: 2.5em;
+       color: #000;
+       position: relative;
+       padding: 1px 4px;
+       margin: 0;
+       top: 0.2em;
+       font-size: 0.9em;
+}
+
 textarea, input {
     border: 6px solid #ddd;
     -moz-border-radius: 10px;

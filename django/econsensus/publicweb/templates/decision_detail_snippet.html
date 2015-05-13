@@ -1,6 +1,7 @@
 {% load url from future %}
 {% load i18n %}
 {% load guardian_tags %}
+{% load publicweb_filters %}
 
 {% if organization %}
 {% get_obj_perms request.user for organization as "organization_permissions" %}
@@ -93,11 +94,17 @@
             {% endfor %}
             {% endwith %}
 		</dl>
-{% if "edit_decisions_feedback" in organization_permissions %}		
-			<div class="controls">
+		<div class="controls">
+			{% if "edit_decisions_feedback" in organization_permissions %}
 				<a class="edit button {{ object.status }}" href="{% url 'publicweb_decision_update' object.id %}">Edit</a>
-			</div>
-{% endif %}
+			{% endif %}
+            <a class="watch toggle {% if request.user|is_watching:object %}watched{% else %}unwatched{% endif %} {{ object.status }}"
+               href="{% if request.user|is_watching:object %}{% url 'remove_watcher' object.id %}{% else %}{% url 'add_watcher' object.id %}{% endif %}?next={{ request.path_info }}"
+            >
+                <input class="watch {% if request.user|is_watching:object %}watched{% else %}unwatched{% endif %}" type="checkbox"{% if request.user|is_watching:object %} checked="True"{% endif %} />
+                {% trans "Watch" %}
+            </a>
+		</div>
 		</div>
 	</div>
 </div>
