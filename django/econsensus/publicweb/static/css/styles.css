@@ -121,6 +121,10 @@ a.toggle {
        font-size: 0.9em;
 }
 
+a.toggle input {
+	cursor: pointer;
+}
+
 textarea, input {
     border: 6px solid #ddd;
     -moz-border-radius: 10px;
@@ -449,6 +453,11 @@ input {
 	display: block;
 	padding: 10px;
 	color: #000;
+}
+
+.summary-list td a.toggle {
+	display: inline;
+	padding: 0;
 }
 
 .summary-list td .iconified {
