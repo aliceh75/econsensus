@@ -121,10 +121,6 @@ a.toggle {
        font-size: 0.9em;
 }
 
-a.toggle input {
-	cursor: pointer;
-}
-
 textarea, input {
     border: 6px solid #ddd;
     -moz-border-radius: 10px;

@@ -101,7 +101,7 @@
             <a class="watch toggle {% if request.user|is_watching:object %}watched{% else %}unwatched{% endif %} {{ object.status }}"
                href="{% if request.user|is_watching:object %}{% url 'remove_watcher' object.id %}{% else %}{% url 'add_watcher' object.id %}{% endif %}?next={{ request.path_info }}"
             >
-                <input class="watch {% if request.user|is_watching:object %}watched{% else %}unwatched{% endif %}" type="checkbox"{% if request.user|is_watching:object %} checked="True"{% endif %} />
+                {% if request.user|is_watching:object %}&#x2611;{% else %}&#x2610;{% endif %}
                 {% trans "Watch" %}
             </a>
 		</div>
