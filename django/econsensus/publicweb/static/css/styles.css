@@ -154,6 +154,14 @@ input {
     cursor: pointer;
 }
 
+/* Sighted users do not need to see table header information repeated in links in each row. Users who instead jump from link to link may do. Use this class to markup such information. */
+.additional-table-link-caption {
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    position: absolute;
+    left: -1000px;
+}
 
 /* Main Blocks */
 

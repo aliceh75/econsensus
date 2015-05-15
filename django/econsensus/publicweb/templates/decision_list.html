@@ -69,6 +69,9 @@
                                     <a class='toggle-link watch'
                                        href="{% if request.user|is_watching:object %}{% url 'remove_watcher' object.id %}{% else %}{% url 'add_watcher' object.id %}{% endif %}?next={{ request.path_info }}">
                                         {% if request.user|is_watching:object %}&#x2611;{% else %}&#x2610;{% endif %}
+                                        <span class='additional-table-link-caption'>
+                                            {% if request.user|is_watching:object %}{% trans "Watch" %}{% else %}{% trans "Unwatch" %}{% endif %} {{ object.excerpt }}
+                                        </span>
                                     </a>
                                  </td>
 				                <td class="excerpt"><a href="{% url 'publicweb_item_detail' object.id %}">{{ object.excerpt }}	</a></td>
