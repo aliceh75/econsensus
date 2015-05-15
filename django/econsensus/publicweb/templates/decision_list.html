@@ -66,7 +66,7 @@
                             {% if tab != 'actionitems' %}
                                 <td class="id"><a href="{% url 'publicweb_item_detail' object.id %}"><span class="iconified">{{ object.id }}</span></a></td>
                                 <td>
-                                    <a class='toggle watch'
+                                    <a class='toggle-link watch'
                                        href="{% if request.user|is_watching:object %}{% url 'remove_watcher' object.id %}{% else %}{% url 'add_watcher' object.id %}{% endif %}?next={{ request.path_info }}">
                                         {% if request.user|is_watching:object %}&#x2611;{% else %}&#x2610;{% endif %}
                                     </a>

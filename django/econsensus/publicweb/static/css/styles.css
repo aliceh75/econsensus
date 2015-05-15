@@ -111,7 +111,7 @@ a.button {
 	top:0.2em;
 }
 
-a.toggle {
+.toggle-link {
        line-height: 2.5em;
        color: #000;
        position: relative;
@@ -451,7 +451,7 @@ input {
 	color: #000;
 }
 
-.summary-list td a.toggle {
+.summary-list td .toggle-link {
 	display: inline;
 	padding: 0;
 }

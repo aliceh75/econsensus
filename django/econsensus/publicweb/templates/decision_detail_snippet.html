@@ -98,7 +98,7 @@
 			{% if "edit_decisions_feedback" in organization_permissions %}
 				<a class="edit button {{ object.status }}" href="{% url 'publicweb_decision_update' object.id %}">Edit</a>
 			{% endif %}
-            <a class="watch toggle {% if request.user|is_watching:object %}watched{% else %}unwatched{% endif %} {{ object.status }}"
+            <a class="watch toggle-link {% if request.user|is_watching:object %}watched{% else %}unwatched{% endif %} {{ object.status }}"
                href="{% if request.user|is_watching:object %}{% url 'remove_watcher' object.id %}{% else %}{% url 'add_watcher' object.id %}{% endif %}?next={{ request.path_info }}"
             >
                 {% if request.user|is_watching:object %}&#x2611;{% else %}&#x2610;{% endif %}
